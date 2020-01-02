@@ -1,0 +1,22 @@
+<scroll-view
+  bindscrolltolower="loadmore"
+  class="list-scroll"
+  lower-threshold="{{100}}"
+  scroll-y="{{true}}"
+>
+  <block
+    wx:for="{{list}}"
+    wx:key="id"
+  >
+    <skeleton unique-id="{{item.id}}">
+      <view class="item">
+        <image
+          class="item-image"
+          lazy-load="{{true}}"
+          src="https://img.ikstatic.cn/MTU3NzY5MDIzMjkwMiM0MjYjcG5n.png"
+        />
+        <view class="item-text">这是第 {{index}} 张图片</view>
+      </view>
+    </skeleton>
+  </block>
+</scroll-view>

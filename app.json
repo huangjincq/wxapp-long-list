@@ -1,6 +1,6 @@
 {
   "pages": [
-    "index/index"
+    "goods-list/goods-list"
   ],
   "window": {
     "backgroundTextStyle": "light",

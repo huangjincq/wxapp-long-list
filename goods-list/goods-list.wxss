@@ -1,0 +1,16 @@
+.list-scroll {
+  height: 100vh;
+}
+.item {
+  display: flex;
+  margin: 20rpx;
+}
+.item-image {
+  width: 300rpx;
+}
+.item-text {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

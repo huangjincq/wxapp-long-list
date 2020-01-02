@@ -1,88 +1,63 @@
 // components/skeleton.js
-import SystemInfo from '../libs/getSystemInfo.js'
+// import SystemInfo from '../libs/getSystemInfo.js'
+import { systemInfo } from '../utils/utils'
+
 Component({
-  /**
-   * 组件的属性列表
-   */
   properties: {
-
-  },
-  /**
-   * 组件的初始数据
-   */
-  data: {
-    height: 0, //卡片高度，用来做外部懒加载的占位
-    showSlot: true, //控制是否显示当前的slot内容
-    skeletonId: ''
-  },
-
-  created() {
-    //设置一个走setData的数据池
-    this.extData = {
-      listItemContainer: null,
+    // 唯一标识id 必传
+    uniqueId: {
+      type: String,
+      value: ''
+    },
+    // 显示到上下几屏
+    showNum: {
+      type: Number,
+      value: 2
     }
+  },
+  data: {
+    height: 0, // 占位高度
+    showSlot: true //控制是否xuanr
+  },
+
+  attached() {
+    this.IntersectionObserver = null
   },
 
   detached() {
-    try {
-      this.extData.listItemContainer.disconnect()
-    } catch (error) {
-
+    if (this.IntersectionObserver) {
+      this.IntersectionObserver.disconnect()
+      this.IntersectionObserver = null
     }
-    this.extData = null
   },
-
   ready() {
-    this.setData({
-      skeletonId: this.randomString(8) //设置唯一标识
-    })
-
-    wx.nextTick(() => {
-      // 修改了监听是否显示内容的方法，改为前后showNum屏高度渲染
-      // 监听进入屏幕的范围relativeToViewport({top: xxx, bottom: xxx})
-      let info = SystemInfo.getInfo()
-      let { windowHeight = 667 } = info.source.system
-      let showNum = 2 //超过屏幕的数量，目前这个设置是上下2屏
-      try {
-        this.extData.listItemContainer = this.createIntersectionObserver()
-        this.extData.listItemContainer.relativeToViewport({ top: showNum * windowHeight, bottom: showNum * windowHeight })
-          .observe(`#list-item-${this.data.skeletonId}`, (res) => {
-            let { intersectionRatio } = res
-            if (intersectionRatio === 0) {
-              console.log('【卸载】', this.data.skeletonId, '超过预定范围，从页面卸载')
-              this.setData({
-                showSlot: false
-              })
-            } else {
-              console.log('【进入】', this.data.skeletonId, '达到预定范围，渲染进页面')
-              this.setData({
-                showSlot: true,
-                height: res.boundingClientRect.height
-              })
-            }
+    // 修改了监听是否显示内容的方法，改为前后showNum屏高度渲染
+    // 监听进入屏幕的范围relativeToViewport({top: xxx, bottom: xxx})
+    const { windowHeight = 667 } = systemInfo()
+    const showNum = this.data.showNum //超过屏幕的数量，目前这个设置是上下2屏
+    try {
+      this.IntersectionObserver = this.createIntersectionObserver()
+      this.IntersectionObserver.relativeToViewport({
+        top: showNum * windowHeight,
+        bottom: showNum * windowHeight
+      }).observe(`#list-item-${this.data.uniqueId}`, res => {
+        let { intersectionRatio } = res
+        if (intersectionRatio === 0) {
+          console.log('【卸载】#', this.data.uniqueId, '超过预定范围，从页面卸载')
+          this.setData({
+            showSlot: false
           })
-      } catch (error) {
-        console.log(error)
-      }
-    })
-    
-  },
-  /**
-   * 组件的方法列表
-   */
-  methods: {
-    /**
-     * 生成随机的字符串
-     */
-    randomString(len) {
-      len = len || 32;
-      var $chars = 'abcdefhijkmnprstwxyz2345678'; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
-      var maxPos = $chars.length;
-      var pwd = '';
-      for (var i = 0; i < len; i++) {
-        pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
-      }
-      return pwd;
+        } else {
+          console.log('【进入】#', this.data.uniqueId, '达到预定范围，渲染进页面')
+          this.setData({
+            showSlot: true,
+            height: res.boundingClientRect.height
+          })
+        }
+      })
+    } catch (error) {
+      console.log(error)
     }
-  }
+  },
+  methods: {}
 })
