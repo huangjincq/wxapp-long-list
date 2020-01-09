@@ -8,6 +8,7 @@
     wx:for="{{list}}"
     wx:key="id"
   >
+    <!-- skeleton组件 包裹item内容 -->
     <skeleton unique-id="{{item.id}}">
       <view class="item">
         <image
