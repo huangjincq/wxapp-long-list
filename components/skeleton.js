@@ -1,5 +1,3 @@
-// components/skeleton.js
-// import SystemInfo from '../libs/getSystemInfo.js'
 import { systemInfo } from '../utils/utils'
 
 Component({
@@ -17,7 +15,7 @@ Component({
   },
   data: {
     height: 0, // 占位高度
-    showSlot: true //控制是否xuanr
+    showSlot: true //控制是否内容
   },
 
   attached() {
@@ -44,9 +42,7 @@ Component({
         let { intersectionRatio } = res
         if (intersectionRatio === 0) {
           console.log('【卸载】#', this.data.uniqueId, '超过预定范围，从页面卸载')
-          this.setData({
-            showSlot: false
-          })
+          this.setData({ showSlot: false })
         } else {
           console.log('【进入】#', this.data.uniqueId, '达到预定范围，渲染进页面')
           this.setData({

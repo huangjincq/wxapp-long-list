@@ -17,18 +17,9 @@ Page({
   getList(num) {
     let list = []
     for (let i = 0; i < num; i++) {
-      list.push({
-        height: this.getRadomHeight(),
-        id: this.randomString(8)
-      })
+      list.push({ id: this.randomString(8) })
     }
     return list
-  },
-  /**
-   * 生成随机(100, 400)高度
-   */
-  getRadomHeight() {
-    return parseInt(Math.random() * 100 + 300)
   },
   // 生成随机字符串
   randomString(len) {
